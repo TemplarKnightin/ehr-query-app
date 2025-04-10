@@ -1,0 +1,70 @@
+[
+  {
+    "content": [
+      {
+        "archetype_node_id": "openEHR-EHR-ADMIN_ENTRY.high_complexity_procedures_sus.v1",
+        "data": {
+          "items": [
+            {
+              "name": { "value": "General data" },
+              "items": [
+                {
+                  "name": { "value": "issue date" },
+                  "value": { "value": "2012-03-01TZ" }
+                },
+                {
+                  "name": { "value": "reason for encounter" },
+                  "value": { "value": "QUIMIOTERAPIA" }
+                },
+                {
+                  "name": { "value": "healthcare unit" },
+                  "value": { "value": "HCPA" }
+                },
+                {
+                  "name": { "value": "State" },
+                  "value": { "value": "BAHIA" }
+                },
+                {
+                  "name": { "value": "patient age" },
+                  "value": { "magnitude": 57 }
+                }
+              ]
+            },
+            {
+              "name": { "value": "chemotherapy" },
+              "items": [
+                {
+                  "name": { "value": "duration of treatment" },
+                  "value": { "magnitude": 4, "units": "months" }
+                },
+                {
+                  "name": { "value": "schema" },
+                  "value": { "value": "FOLFOX" }
+                },
+                {
+                  "name": { "value": "date of beginning of chemotherapy" },
+                  "value": { "value": "2012-03-05TZ" }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "archetype_node_id": "openEHR-EHR-ADMIN_ENTRY.patient_discharge.v1",
+        "data": {
+          "items": [
+            {
+              "name": { "value": "date of discharge" },
+              "value": { "value": "2012-05-10TZ" }
+            },
+            {
+              "name": { "value": "reason for discharge" },
+              "value": { "value": "Alta programada" }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

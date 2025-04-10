@@ -1,0 +1,73 @@
+{
+    "name": "Outpatient high complexity procedures",
+    "children": [
+      {
+        "name": "HCPA",
+        "children": [
+          {
+            "name": "General data",
+            "children": [
+              { "name": "issue date", "path": "content[0].data.items[0].items[0].value.value" },
+              { "name": "reason for encounter", "path": "content[0].data.items[0].items[1].value.value" },
+              { "name": "healthcare unit", "path": "content[0].data.items[0].items[2].value.value" },
+              { "name": "State", "path": "content[0].data.items[0].items[3].value.value" },
+              { "name": "patient age", "path": "content[0].data.items[0].items[4].value.magnitude" }
+            ]
+          },
+          {
+            "name": "chemotherapy",
+            "children": [
+              { "name": "duration of treatment", "path": "content[0].data.items[1].items[0].value.magnitude" },
+              { "name": "schema", "path": "content[0].data.items[1].items[1].value.value" },
+              { "name": "date of beginning of chemotherapy", "path": "content[0].data.items[1].items[2].value.value" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Patient Discharge",
+        "children": [
+          { "name": "date of discharge", "path": "content[1].data.items[0].value.value" },
+          { "name": "reason for discharge", "path": "content[1].data.items[1].value.value" }
+        ]
+      },
+      {
+        "name": "Problem/Diagnosis",
+        "children": [
+          { "name": "Problem", "path": "content[2].data.items[0].value.value" },
+          { "name": "Secondary Diagnosis", "path": "content[2].data.items[1].value.value" },
+          { "name": "Associated causes", "path": "content[2].data.items[2].value.value" },
+          { "name": "Invaded regional linphonodes", "path": "content[2].data.items[3].value.value" },
+          {
+            "name": "Tumour - TNM Cancer staging",
+            "children": [
+              {
+                "name": "Clinical (cTNM)",
+                "children": [
+                  { "name": "Clinical staging", "path": "content[2].data.items[4].items[0].items.value.value" }
+                ]
+              },
+              {
+                "name": "Pathological (pTNM)",
+                "children": [
+                  { "name": "Histopathological grading (G)", "path": "content[2].data.items[4].items[1].items[0].value.value" },
+                  { "name": "date of pathological identification", "path": "content[2].data.items[4].items[1].items[1].value.value" }
+                ]
+              },
+              { "name": "topography", "path": "content[2].data.items[4].items[2].value.value" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Procedure undertaken",
+        "children": [
+          { "name": "Procedure", "path": "content[3].description.items.value.value" },
+          { "name": "procedure time", "path": "content[3].time.value" },
+          { "name": "procedure code", "path": "content[3].description.items.value.defining_code.code_string" },
+          { "name": "procedure status", "path": "content[3].ism_transition.current_state.value" }
+        ]
+      }
+    ]
+  }
+  
