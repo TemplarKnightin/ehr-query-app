@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import QueryBuilder from './QueryBuilder';
-import EHRFlattener from './EHRFlattener';
-import ehrData from './mockEHRs.json';
-import models from '../models/models.json';
+import { useState } from "react";
+import QueryBuilder from "./QueryBuilder";
+import EHRFlattener from "./EHRFlattener";
+import ehrData from "./mockEHRs.json";
+import models from "../models/models.json";
 
 export default function EHRQueryApp() {
   const [filters, setFilters] = useState([]);
-  const [logic, setLogic] = useState('AND');
+  const [logic, setLogic] = useState("AND");
   const [results, setResults] = useState([]);
 
   const getAllLeafFields = (node, fields = []) => {
@@ -26,7 +26,7 @@ export default function EHRQueryApp() {
   };
 
   const addFilter = () => {
-    setFilters([...filters, { key: '', value: '' }]);
+    setFilters([...filters, { key: "", value: "" }]);
   };
 
   const removeFilter = (index) => {
@@ -34,11 +34,29 @@ export default function EHRQueryApp() {
     setFilters(updated);
   };
 
-  const handleQuery = () => {
+  async function fetchData(filters) {
+    try {
+      const response = await fetch("http://localhost:4000/api/query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ filters }),
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
+  }
+
+  const handleQuery = async () => {
     const filterObj = {};
     filters.forEach(({ key, value }) => {
-      if (!key || value === '') return;
-      if (typeof value === 'object' && ('start' in value || 'end' in value)) {
+      if (!key || value === "") return;
+      if (typeof value === "object" && ("start" in value || "end" in value)) {
         filterObj[key] = {};
         if (value.start) filterObj[key].start = value.start;
         if (value.end) filterObj[key].end = value.end;
@@ -47,27 +65,31 @@ export default function EHRQueryApp() {
       }
     });
 
-    const query = new QueryBuilder().buildQuery(filterObj);
-    const filtered = ehrData.filter((ehr) => {
-      try {
-        const checks = Object.entries(query).map(([path, val]) => {
-          const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
-          let curr = ehr;
-          for (const k of keys) curr = curr?.[k];
-          if (typeof val === 'object') {
-            if ('$gte' in val && curr < val['$gte']) return false;
-            if ('$lte' in val && curr > val['$lte']) return false;
-            return true;
-          }
-          return curr === val;
-        });
-        return logic === 'AND' ? checks.every(Boolean) : checks.some(Boolean);
-      } catch {
-        return false;
-      }
-    });
+    const queryResults = await fetchData(filters);
+    if (queryResults) {
+      setResults(queryResults);
+    }
+    // const query = new QueryBuilder().buildQuery(filterObj);
+    // const filtered = ehrData.filter((ehr) => {
+    //   try {
+    //     const checks = Object.entries(query).map(([path, val]) => {
+    //       const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+    //       let curr = ehr;
+    //       for (const k of keys) curr = curr?.[k];
+    //       if (typeof val === 'object') {
+    //         if ('$gte' in val && curr < val['$gte']) return false;
+    //         if ('$lte' in val && curr > val['$lte']) return false;
+    //         return true;
+    //       }
+    //       return curr === val;
+    //     });
+    //     return logic === 'AND' ? checks.every(Boolean) : checks.some(Boolean);
+    //   } catch {
+    //     return false;
+    //   }
+    // });
 
-    const flatResults = new EHRFlattener().flattenEHRS(filtered);
+    // const flatResults = new EHRFlattener().flattenEHRS(filtered);
     setResults(flatResults);
   };
 
@@ -91,16 +113,18 @@ export default function EHRQueryApp() {
         <div key={index} className="flex gap-4 items-center">
           <select
             value={filter.key}
-            onChange={(e) => updateFilter(index, 'key', e.target.value)}
+            onChange={(e) => updateFilter(index, "key", e.target.value)}
             className="border p-1 w-1/3"
           >
             <option value="">Select field</option>
             {allFields.map((field) => (
-              <option key={field} value={field}>{field}</option>
+              <option key={field} value={field}>
+                {field}
+              </option>
             ))}
           </select>
 
-          {filter.key?.includes('date') || filter.key?.includes('age') ? (
+          {filter.key?.includes("date") || filter.key?.includes("age") ? (
             <>
               <input
                 type="text"
@@ -108,7 +132,7 @@ export default function EHRQueryApp() {
                 className="border p-1 w-1/4"
                 onChange={(e) => {
                   const value = { ...filter.value, start: e.target.value };
-                  updateFilter(index, 'value', value);
+                  updateFilter(index, "value", value);
                 }}
               />
               <input
@@ -117,15 +141,15 @@ export default function EHRQueryApp() {
                 className="border p-1 w-1/4"
                 onChange={(e) => {
                   const value = { ...filter.value, end: e.target.value };
-                  updateFilter(index, 'value', value);
+                  updateFilter(index, "value", value);
                 }}
               />
             </>
           ) : (
             <input
               type="text"
-              value={filter.value || ''}
-              onChange={(e) => updateFilter(index, 'value', e.target.value)}
+              value={filter.value || ""}
+              onChange={(e) => updateFilter(index, "value", e.target.value)}
               className="border p-1 w-1/2"
             />
           )}

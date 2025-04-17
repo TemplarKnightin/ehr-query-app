@@ -14,6 +14,9 @@ const db = client.db("orbda");
 const collection = db.collection("ehrs");
 
 router.post("/", async (req, res) => {
+  console.log("====================================");
+  console.log(req.body);
+  console.log("====================================");
   const { filters } = req.body;
 
   try {
